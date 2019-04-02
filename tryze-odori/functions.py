@@ -101,7 +101,7 @@ def download_files(driver, category_dict, facility_en_name):
 		# if the category is not empty
 		if category_tuple[1] > 0:
 			# loop through each item to download it
-			for i in range(1, itemNum + 1):
+			for i in range(1, category_tuple[1] + 1):
 				# CAUTION: the parent category element should be obtained every time before clicking the item
 				category_container = driver.find_element_by_css_selector(".gwBoardCollect__folder:nth-child(%s)" %str(category_tuple_list.index(category_tuple) + 1))
 				# get the item
