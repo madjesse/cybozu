@@ -15,3 +15,9 @@ import data, functions
 
 d = {"a": 1, "b": 2}
 print(list(d.items()))
+
+regex = re.compile('\d.*\d')
+
+a = "継続支援コネクトワークス大通東/2018/03/31_継続支援コネクトワークス大通東"
+print(regex.findall(a))
+

@@ -23,6 +23,9 @@ import data
 # div.gwBoardCollect__board a:nth-child(2)
 # =====================================================
 
+# the regex for getting the date string
+regex_date = re.compile('\d.*\d')
+
 def login(driver):
 	"""to login to the cybozu live system"""
 	loginUrl = "https://cybozulive.com/login?dummy=1552289327620"
@@ -64,8 +67,6 @@ def get_post_board(driver):
 def construct_dict(driver):
 	"""to make the dictionary for looping to download"""
 	category_dict = {}
-	# the regex for getting the date string
-	regex_date = re.compile('\d.+\d')
 	# get all category names 
 	categories = driver.find_elements_by_css_selector(".gwBoardCollect__folder")
 	# loop through each category to compare its text with the target string, construct a proper english name, get its item number and set up the dict
@@ -93,7 +94,7 @@ def construct_dict(driver):
 	# return the dict
 	return category_dict
 
-def download_files(driver, category_dict):
+def download_files(driver, category_dict, facility_en_name):
 	category_tuple_list = list(category_dict.items())
 	for category_tuple in category_tuple_list:
 		file_index = 1
@@ -107,6 +108,19 @@ def download_files(driver, category_dict):
 				link = category_container.find_element_by_css_selector(".gwBoardCollect__board:nth-child(%s) a:nth-child(2)" %str(i))
 				# get the item title text that will be used to extract date string if it has
 				title_text = link.find_element_by_css_selector("span").text
+				date_list = regex_date.findall(title_text)
+				# if there is date string in the title text 
+				if len(date_list) > 0:
+					target_str = date_list[0]
+					if "/" in target_str:
+						date_str_list = target_str.split("/")
+						date_str = "".join(date_str_list)
+					else:
+						date_str = target_str
+					filename = "%s-%s-%s.html" %(facility_en_name, category_tuple[0], date_str)
+				# otherwise create the filename in a different way
+				else:
+					filename = "%s-%s-%s.html" %(facility_en_name, category_tuple[0], str(file_index))
 
 				# click the link 
 				link.click()
@@ -117,7 +131,22 @@ def download_files(driver, category_dict):
 				# press delete to delete text in filename input area
 				pyautogui.press("delete")
 				time.sleep(0.5)
-
-				# create a proper filename
-				
-
+				# typewrite the filename 
+				pyautogui.typewrite(filename)
+				time.sleep(1)
+				# press return to start downloading
+				pyautogui.press('return')
+				# wait until download is completed
+				filepath = "c:\\Users\\user\\Downloads\\%s" %filename
+				i = 0
+				while not os.path.exists(filepath):
+					time.sleep(1)
+					logging.debug("saving...")
+					i += 1
+					if i == 10:
+						logging.debug("download is disrupted.\n")
+						break
+				# prepare for the next download
+				file_index += 1
+				driver.back()
+				time.sleep(1)

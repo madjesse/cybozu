@@ -13,12 +13,12 @@ driver = webdriver.Chrome("./chromedriver.exe")
 f.login(driver)
 
 # loop through the facility dict to perform the relevant downloading: the outmost loop=====================================================================================
-for facility_name in data.FACILITY:
+for facility_jp_name, facility_en_name in data.FACILITY.items():
 	# pass the 2 facilities whose downloading has completed
-	if facility_name == "継続支援トラビズ" or facility_name == "継続支援コネクトワークス大通東":
+	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東":
 		continue
 	# click the facility link to proceed to the next page
-	f.get_facility(facility_name)
+	f.get_facility(facility_jp_name)
 
 	# get into the post board, scroll down to the bottom and click the collecting link
 	f.get_post_board(driver)

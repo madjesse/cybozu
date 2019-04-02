@@ -3,15 +3,15 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 # ============================data constants==================================
-FACILITY = [
-"継続支援コネクトワークス大通東", 
-"就労支援トライズ 大通", 
-"継続支援プラスタ", 
-"継続支援セコンド", 
-"就労支援ブリッジ", 
-"就労支援トライズ", 
-"継続支援トラビズ"
-]
+FACILITY = {
+"継続支援コネクトワークス大通東": "connect", 
+"就労支援トライズ 大通": "tryze-odori",
+"継続支援プラスタ": "plusta", 
+"継続支援セコンド": "second",
+"就労支援ブリッジ": "bridge",
+"就労支援トライズ": "tryze-station",
+"継続支援トラビズ": "trbiz"
+}
 
 CATEGORY = {
 "朝礼": "morning", 
@@ -40,3 +40,5 @@ CATEGORY = {
 "ログ": "logging", 
 "(未分類)": "others"
 }
+
+date_relevant = []
