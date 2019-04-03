@@ -10,8 +10,10 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %
 logging.disable(logging.CRITICAL)
 print("Press ctrl + c to quit.\n")
 
-# driver
-driver = webdriver.Chrome("./chromedriver.exe")
+# driver: windows
+# driver = webdriver.Chrome("./chromedriver.exe")
+# driver: mac
+driver = webdriver.Chrome("./chromedriver")
 # login
 f.login(driver)
 # the regex to check date string
@@ -49,7 +51,7 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 				# get the item title text that will be used to extract date string if it has
 				title_text = f.get_title_text(link)
 				# only check whether there is a date string when the title text is less than 20 characters
-				if len(unicodedata.normalize('NFKC', title_text)) <=20:
+				if len(unicodedata.normalize('NFKC', title_text)) <= 20:
 					date_list = f.check_date(title_text, regex_date)
 				else:
 					date_list = []
@@ -57,18 +59,23 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 				filename = f.construct_filename(date_list, facility_en_name, category_tuple[0], file_index)
 				# set the path based on the filename 
 				filepath = "c:\\Users\\user\\Downloads\\%s" %filename
+				# for mac
+				# filepath = "/Users/apple/Downloads/%s" %filename
+
 				# if the file exists, log the message, back to the previous page and continue the loop
 				if f.check_existing(filepath):
 					# logging.debug("%s already exists.\n" %filename)
 					file_index += 1
 					print("%s: already exists.\n" %filename)
 					continue
+				# otherwise, download the file
 				else:
 					# download
 					f.click_link(link)
 					f.download_file(driver, link, filename, filepath, file_index)
 					# prepare for the next download
 					f.prepare_next(driver, file_index)
+
 			# end of the 1st level loop==================================================================================================================
 
 	# end of the 2nd level loop==========================================================================================================================================

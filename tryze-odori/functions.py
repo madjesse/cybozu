@@ -132,8 +132,12 @@ def download_file(driver, link, filename, filepath, file_index):
 	"""perform the download"""
 	# press ctrl + s to save it 
 	pyautogui.hotkey('ctrl', 's')
+	# for mac
+	# pyautogui.hotkey('command', 's')
 	time.sleep(1)
 	# press delete to delete text in filename input area
+	# for mac
+	# pyautogui.hotkey('command', 'a')
 	pyautogui.press("delete")
 	time.sleep(0.5)
 	# typewrite the filename 
