@@ -15,49 +15,49 @@ import unicodedata
 # 	items = category.find_elements_by_css_selector(".gwBoardCollect__board")
 # 	print(len(items))
 # driver
-# driver = webdriver.Chrome("./chromedriver.exe")
-# # login
-# f.login(driver)
-# # the regex to check date string
+driver = webdriver.Chrome("./chromedriver")
+# login
+f.login(driver)
+# the regex to check date string
 regex_date = re.compile('\d+')
 
-# for facility_jp_name, facility_en_name in data.FACILITY.items():
-# 	# pass the 2 facilities whose downloading has completed
-# 	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援ブリッジ":
-# 		continue
-# 	# click the facility link to proceed to the next page
-# 	print(facility_jp_name)
-# 	f.get_facility(driver, facility_jp_name)
+for facility_jp_name, facility_en_name in data.FACILITY.items():
+	# pass the 2 facilities whose downloading has completed
+	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援ブリッジ":
+		continue
+	# click the facility link to proceed to the next page
+	print(facility_jp_name)
+	f.get_facility(driver, facility_jp_name)
 
-# 	# get into the post board, scroll down to the bottom and click the collecting link
-# 	f.get_post_board(driver)
+	# get into the post board, scroll down to the bottom and click the collecting link
+	f.get_post_board(driver)
 
-# 	# build the dict for the facility
-# 	category_dict = f.construct_dict(driver, regex_date)
-# 	print(category_dict)
+	# build the dict for the facility
+	category_dict = f.construct_dict(driver, regex_date)
+	print(category_dict)
 
-# 	# create a list based on the dict above
-# 	category_tuple_list = list(category_dict.items())
+	# create a list based on the dict above
+	category_tuple_list = list(category_dict.items())
 
-# 	for category_tuple in category_tuple_list:
-# 		file_index = 1 
-# 		# if the category is not empty
-# 		if category_tuple[1] > 0:
+	for category_tuple in category_tuple_list:
+		file_index = 1 
+		# if the category is not empty
+		if category_tuple[1] > 0:
 
-# 			# loop through each item: the 1st level loop=================================================================================================
-# 			for i in range(1, category_tuple[1] + 1):
-# 				container_index = category_tuple_list.index(category_tuple) + 1
-# 				link_index = i 
-# 				# get the link element 
-# 				link = f.get_link_element(driver, container_index, link_index)
-# 				# get the item title text that will be used to extract date string if it has
-# 				title_text = f.get_title_text(link)
-# 				date_list = f.check_date(title_text, regex_date)
-# 				# create a proper filename 
-# 				filename = f.construct_filename(date_list, facility_en_name, category_tuple[0], file_index)
-# 				print(filename)
-# 				time.sleep(0.5)
-# 	f.back_to_facility(driver)
+			# loop through each item: the 1st level loop=================================================================================================
+			for i in range(1, category_tuple[1] + 1):
+				container_index = category_tuple_list.index(category_tuple) + 1
+				link_index = i 
+				# get the link element 
+				link = f.get_link_element(driver, container_index, link_index)
+				# get the item title text that will be used to extract date string if it has
+				title_text = f.get_title_text(link)
+				date_list = f.check_date(title_text, regex_date)
+				# create a proper filename 
+				filename = f.construct_filename(date_list, facility_en_name, category_tuple[0], file_index)
+				print(filename)
+				time.sleep(0.5)
+	f.back_to_facility(driver)
 				
 				# date_list = f.check_date(title_text, regex_date)
 				# # create a proper filename 
@@ -74,5 +74,3 @@ regex_date = re.compile('\d+')
 				# 	f.download_file(driver, link, filename, filepath, file_index)
 				# # prepare for the next download
 				# f.prepare_next(driver, file_index)
-date_list = regex_date.findall(unicodedata.normalize('NFKC', "平成３１年"))
-print(len(unicodedata.normalize('NFKC', "平成３１年")))
