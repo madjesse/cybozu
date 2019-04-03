@@ -33,12 +33,11 @@ CATEGORY = {
 "研修": "training", 
 "事例検討": "discussions", 
 "専門用語解説": "extra", 
-"office": "office", 
+"Office": "office", 
 "プラスタこどもあーと": "plustaart", 
 "カリキュラム": "curriculum", 
 "読み物": "reading", 
 "ログ": "logging", 
+"odori@トライズ大通": "info",
 "(未分類)": "others"
 }
-
-date_relevant = []

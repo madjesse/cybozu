@@ -1,8 +1,11 @@
-import data
+import data, logging, re, pyautogui, unicodedata
 import functions as f
+from selenium import webdriver
 
 # ============do NOT modify===========================
 # configure logging
+pyautogui.FAILSAFE = False
+
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 logging.disable(logging.CRITICAL)
 print("Press ctrl + c to quit.\n")
@@ -11,112 +14,69 @@ print("Press ctrl + c to quit.\n")
 driver = webdriver.Chrome("./chromedriver.exe")
 # login
 f.login(driver)
+# the regex to check date string
+regex_date = re.compile('\d+')
 
-# loop through the facility dict to perform the relevant downloading: the outmost loop=====================================================================================
+# loop through each facility: the 3rd level loop==================================================================================================================================================
 for facility_jp_name, facility_en_name in data.FACILITY.items():
 	# pass the 2 facilities whose downloading has completed
-	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東":
+	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援ブリッジ":
 		continue
 	# click the facility link to proceed to the next page
-	f.get_facility(facility_jp_name)
+	f.get_facility(driver, facility_jp_name)
 
 	# get into the post board, scroll down to the bottom and click the collecting link
 	f.get_post_board(driver)
 
 	# build the dict for the facility
-	category_dict = f.construct_dict(driver)
+	category_dict = f.construct_dict(driver, regex_date)
+	print(category_dict)
+	# create a list based on the dict above
+	category_tuple_list = list(category_dict.items())
 
+	# loop through each category: the 2nd level loop================================================================================================================
+	for category_tuple in category_tuple_list:
+		file_index = 1 
+		# if the category is not empty
+		if category_tuple[1] > 0:
 
-
-
-# loop through the constructed dict to download each file
-for categoryName, itemNum in categoryDict.items():
-	fileIndex = 1
-	if itemNum > 0:
-		for i in range(1, itemNum + 1):
-			# get parent element each time backed to the original page
-			categoryElement = driver.find_element_by_css_selector(".gwBoardCollect__folder:nth-child(%s)" %str(categoryNames.index(categoryName) + 1))
-			links = categoryElement.find_elements_by_css_selector(".gwBoardCollect__board")
-			# get each anchor element
-			while True:
-				try:
-					link = categoryElement.find_element_by_css_selector(".gwBoardCollect__board:nth-child(%s) a:nth-child(2)" %str(i))
-				except:
-					time.sleep(0.5)
+			# loop through each item: the 1st level loop=================================================================================================
+			for i in range(1, category_tuple[1] + 1):
+				container_index = category_tuple_list.index(category_tuple) + 1
+				link_index = i 
+				# get the link element 
+				link = f.get_link_element(driver, container_index, link_index)
+				# get the item title text that will be used to extract date string if it has
+				title_text = f.get_title_text(link)
+				# only check whether there is a date string when the title text is less than 20 characters
+				if len(unicodedata.normalize('NFKC', title_text)) <=20:
+					date_list = f.check_date(title_text, regex_date)
 				else:
-					titleText = link.find_element_by_css_selector("span").text
-					break
-	
-			# click the link 
-			link.click()
-			time.sleep(1)
-			# press ctrl + s to save it 
-			pyautogui.hotkey('ctrl', 's')
-			time.sleep(1)
-			# press delete to delete text in filename area
-			pyautogui.press("delete")
-			time.sleep(0.5)
-# ==========================================================
+					date_list = []
+				# create a proper filename 
+				filename = f.construct_filename(date_list, facility_en_name, category_tuple[0], file_index)
+				# set the path based on the filename 
+				filepath = "c:\\Users\\user\\Downloads\\%s" %filename
+				# if the file exists, log the message, back to the previous page and continue the loop
+				if f.check_existing(filepath):
+					# logging.debug("%s already exists.\n" %filename)
+					file_index += 1
+					print("%s: already exists.\n" %filename)
+					continue
+				else:
+					# download
+					f.click_link(link)
+					f.download_file(driver, link, filename, filepath, file_index)
+					# prepare for the next download
+					f.prepare_next(driver, file_index)
+			# end of the 1st level loop==================================================================================================================
 
-			# type in new file name according to category
-			# if the category is date-relevant, get the titleText using the regex and use the text to construct filenames
+	# end of the 2nd level loop==========================================================================================================================================
 
-# =================modify the category names that are date-relevant==========================================
-			if categoryName == "morning2019" or categoryName == "meeting2019":
-				match = regex.findall(titleText)
-				dates = match[0].split("/")
-				dateString = "".join(dates)
-# ================modify the filename constructor===========================================
-				filename = "connect-%s-%s.html" %(categoryName, dateString)
-			# otherwise use the following filename constructor
-			else:
-				filename = "connect-%s-%s.html" %(categoryName, str(fileIndex))
-
-# ==========================do NOT modify===============================================
-			pyautogui.typewrite(filename)
-			time.sleep(1)
-			# press return to ok 
-			pyautogui.press('return')
-			# log info of save file 
-			logging.debug("%s: %s", str(categoryNames.index(categoryName) + 1), str(i))
-			# wait until download is completed
-			filepath = "c:\\Users\\user\\Downloads\\%s" %filename
-			i = 0
-			while not os.path.exists(filepath):
-				time.sleep(1)
-				logging.debug("saving...")
-				i += 1
-				if i == 10:
-					# press ctrl + s to save it 
-					pyautogui.hotkey('ctrl', 's')
-					time.sleep(1)
-					# press delete to delete text in filename area
-					pyautogui.press("delete")
-					time.sleep(0.5)
-					# type in new file name 
-					# type in new file name according to category
-
-# =================modify the category names that are date-relevant==========================================
-					if categoryName == "morning2019" or categoryName == "meeting2019":
-						match = regex.findall(titleText)
-						dates = match[0].split("/")
-						dateString = "".join(dates)
-# ================modify the filename constructor===========================================
-						filename = "connect-%s-%s.html" %(categoryName, dateString)
-					# otherwise use the following filename constructor
-					else:
-						filename = "connect-%s-%s.html" %(categoryName, str(fileIndex))
-
-# =================================do NOT modify========================================
-					pyautogui.typewrite(filename)
-					time.sleep(1)
-					# press return to ok 
-					pyautogui.press('return')
-					# log info of save file 
-					logging.debug("%s: %s", str(categoryNames.index(categoryName) + 1), str(i))
-			logging.debug("%s is saved as %s.\n" %(titleText, filename))
-
-			fileIndex += 1
-			# back
-			driver.back()
-			time.sleep(1)
+	# back to the facility list page
+	f.back_to_facility(driver)
+	# give the user some time to manage the downloaded files before the download of the next category begins and the program terminates if "n" is pressed
+	waiting = input("Start the next download? (y/n)")
+	if waiting == "n":
+		break
+# end of the 3rd level loop=========================================================================================================================================================
