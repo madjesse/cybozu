@@ -132,7 +132,7 @@ def construct_filename(date_list, facility_en_name, category_en_name, file_index
 	"""create a proper filename for the file"""
 	if len(date_list) > 0:
 		target_str = "".join(date_list)
-		filename = "%s-%s-%s.html" %(facility_en_name, category_en_name, target_str)
+		filename = "%s-%s-%s-%s.html" %(facility_en_name, category_en_name, target_str, str(file_index))
 	# otherwise create the filename in a different way
 	else:
 		filename = "%s-%s-%s.html" %(facility_en_name, category_en_name, str(file_index))
