@@ -22,7 +22,7 @@ regex_date = re.compile('\d+')
 # loop through each facility: the 3rd level loop==================================================================================================================================================
 for facility_jp_name, facility_en_name in data.FACILITY.items():
 	# pass the 2 facilities whose downloading has completed
-	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援ブリッジ" or facility_jp_name == "就労支援トライズ 大通":
+	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援ブリッジ" or facility_jp_name == "就労支援トライズ 大通" or facility_jp_name == "継続支援プラスタ":
 		continue
 	# click the facility link to proceed to the next page
 	f.get_facility(driver, facility_jp_name)

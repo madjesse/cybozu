@@ -75,7 +75,7 @@ def construct_dict(driver, regex_date):
 		# displayed category name 
 		displayed_name = category.find_element_by_css_selector(".gwBoardCollect__folder__name a").text
 		for jp_str, en_str in data.CATEGORY.items():
-			if jp_str in displayed_name:
+			if jp_str in displayed_name and "プチMTG" not in displayed_name:
 # convert each jp name into a proper english name
 				category_name_base = en_str
 				date_match = regex_date.findall(displayed_name)
@@ -84,6 +84,14 @@ def construct_dict(driver, regex_date):
 				else:
 					category_name = category_name_base
 # add the converted name into the list
+				break
+			elif "プチMTG" in displayed_name:
+				category_name_base = "MTG"
+				date_match = regex_date.findall(displayed_name)
+				if len(date_match) > 0:
+					category_name = category_name_base + date_match[0]
+				else:
+					category_name = category_name_base
 				break
 		# category item number
 		items = category.find_elements_by_css_selector(".gwBoardCollect__board")
