@@ -14,10 +14,11 @@ FACILITY = {
 }
 
 CATEGORY = {
-"朝礼": "morning", 
-"議事録": "meeting", 
-"雑談議事録": "submeeting", 
-"体制": "teamwork", 
+"朝礼": "morning", #date
+"議事録": "meeting", #date
+"雑談議事録": "submeeting", #date
+"体制": "teamwork", #date
+"ログ": "logging", #date
 "企業見学資料": "corpvisiting", 
 "支援会議": "individualplans", 
 "ヤフオク": "yahoo", 
@@ -37,7 +38,13 @@ CATEGORY = {
 "プラスタこどもあーと": "plustaart", 
 "カリキュラム": "curriculum", 
 "読み物": "reading", 
-"ログ": "logging", 
 "odori@トライズ大通": "info",
 "(未分類)": "others"
 }
+DATE_RELEVANT = [
+"morning",
+"meeting",
+"submeeting",
+"teamwork",
+"logging"
+]

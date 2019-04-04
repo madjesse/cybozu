@@ -15,7 +15,7 @@ import unicodedata
 # 	items = category.find_elements_by_css_selector(".gwBoardCollect__board")
 # 	print(len(items))
 # driver
-driver = webdriver.Chrome("./chromedriver")
+driver = webdriver.Chrome("./chromedriver.exe")
 # login
 f.login(driver)
 # the regex to check date string
@@ -41,6 +41,7 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 
 	for category_tuple in category_tuple_list:
 		file_index = 1 
+		print(category_tuple[0])
 		# if the category is not empty
 		if category_tuple[1] > 0:
 
@@ -52,12 +53,17 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 				link = f.get_link_element(driver, container_index, link_index)
 				# get the item title text that will be used to extract date string if it has
 				title_text = f.get_title_text(link)
-				date_list = f.check_date(title_text, regex_date)
+				date_list = []
+				for date_item in data.DATE_RELEVANT:
+					if date_item in category_tuple[0]:
+						date_list = f.check_date(title_text, regex_date)
+						break
 				# create a proper filename 
 				filename = f.construct_filename(date_list, facility_en_name, category_tuple[0], file_index)
 				print(filename)
+				file_index += 1
 				time.sleep(0.5)
-	f.back_to_facility(driver)
+	break
 				
 				# date_list = f.check_date(title_text, regex_date)
 				# # create a proper filename 
