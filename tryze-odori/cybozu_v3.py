@@ -22,7 +22,7 @@ regex_date = re.compile('\d+')
 # loop through each facility: the 3rd level loop==================================================================================================================================================
 for facility_jp_name, facility_en_name in data.FACILITY.items():
 	# pass the 2 facilities whose downloading has completed
-	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援ブリッジ" or facility_jp_name == "就労支援トライズ 大通" or facility_jp_name == "継続支援プラスタ":
+	if facility_jp_name == "継続支援トラビズ" or facility_jp_name == "継続支援コネクトワークス大通東" or facility_jp_name == "就労支援トライズ 大通" or facility_jp_name == "継続支援プラスタ" or facility_jp_name == "継続支援セコンド" or facility_jp_name == "就労支援トライズ" :
 		continue
 	# click the facility link to proceed to the next page
 	f.get_facility(driver, facility_jp_name)
@@ -37,7 +37,7 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 	category_tuple_list = list(category_dict.items())
 
 	# loop through each category: the 2nd level loop================================================================================================================
-	for category_tuple in category_tuple_list:
+	for category_tuple in category_tuple_list[:3]:
 		file_index = 1 
 		# if the category is not empty
 		if category_tuple[1] > 0:
