@@ -37,7 +37,7 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 	category_tuple_list = list(category_dict.items())
 
 	# loop through each category: the 2nd level loop================================================================================================================
-	for category_tuple in category_tuple_list:
+	for category_tuple in category_tuple_list[13:15]:
 		file_index = 1 
 		# if the category is not empty
 		if category_tuple[1] > 0:
@@ -60,6 +60,7 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 				filename = f.construct_filename(date_list, facility_en_name, category_tuple[0], file_index)
 				# set the path based on the filename 
 				filepath = "c:\\Users\\user\\Downloads\\%s" %filename
+
 	# 			# for mac
 	# 			# filepath = "/Users/apple/Downloads/%s" %filename
 				# download
