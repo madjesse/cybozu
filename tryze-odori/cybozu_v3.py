@@ -37,19 +37,7 @@ for facility_jp_name, facility_en_name in data.FACILITY.items():
 	category_tuple_list = list(category_dict.items())
 
 	# loop through each category: the 2nd level loop================================================================================================================
-<<<<<<< HEAD
 	for category_tuple in category_tuple_list[5:8]:
-=======
-<<<<<<< HEAD
-	for category_tuple in category_tuple_list[15:]:
-=======
-<<<<<<< HEAD
-	for category_tuple in category_tuple_list[:3]:
-=======
-	for category_tuple in category_tuple_list[13:15]:
->>>>>>> 180e2a8ebb02baef0bd465634b48a959e8aa6da3
->>>>>>> cecbef7eba685c7fce7184d138f4471665f66066
->>>>>>> 0ceda736d940f1e66f95a3af2d933c25bf1c1e37
 		file_index = 1 
 		# if the category is not empty
 		if category_tuple[1] > 0:
