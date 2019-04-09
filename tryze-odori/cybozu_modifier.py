@@ -1,10 +1,10 @@
 import time, bs4, os, re
 
 # text to be added
-add_text = '<script type="text/javascript" src="jquery-3.3.1.min.js"></script><script type="text/javascript" src="cybozu_trbiz.js"></script>\n'
+add_text = '<script type="text/javascript" src="jquery-3.3.1.min.js"></script><script type="text/javascript" src="cybozu_tryze_odori.js"></script>\n'
 
-# get all files
-files = os.listdir("cybozu_downloaded")
+# get all the files in the targeted directory
+files = os.listdir("E:\\company\\cybozu\\tryze-odori")
 # get all needed html fils 
 file_list = []
 for file in files:
@@ -12,9 +12,9 @@ for file in files:
 		file_list.append(file)
 
 for base_file in file_list:
-	original_path = "cybozu_downloaded\\%s" %base_file
+	original_path = "E:\\company\\cybozu\\tryze-odori\\%s" %base_file
 	original_file = open(original_path, encoding='utf-8', errors='replace')
-	new_path = "cybozu_trbiz\\%s" %base_file 
+	new_path = "E:\\company\\cybozu\\tryze-odori-edited\\%s" %base_file 
 	new_file = open(new_path, "w", encoding='utf-8', errors='replace')
 	for line in original_file:
 		if "</head>\n" in line:
