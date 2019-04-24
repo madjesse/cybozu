@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Collect Filenames</title>
+	<script src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<input type="file" id="files" name="files[]" multiple />
+	<output id="list"></output>
+	<script>
+		var pattern = /[^-]+-[^-]+-[^-]+/;
+
+	  function handleFileSelect(e) {
+	    var files = e.target.files; // FileList object
+	    // files is a FileList of File objects. List some properties.
+	    var allFilenames = [];
+	    for (var i = 0, f; f = files[i]; i++) {
+	    	fileSubStr = f.name.match(pattern)[0];
+	    	if ($.inArray(fileSubStr, allFilenames) == -1) {
+	    		allFilenames.push(fileSubStr);
+	    	}
+	    }
+	    console.log(allFilenames);
+	  }
+
+	  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+	</script>
+
+</body>
+</html>
